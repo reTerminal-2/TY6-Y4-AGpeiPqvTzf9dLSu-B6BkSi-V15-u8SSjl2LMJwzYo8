@@ -137,6 +137,30 @@ local function request(options)
 	Event.Event:Wait()
 	return Response
 end
+local gmt = getrawmetatable(game)
+        local old = gmt.__namecall
+        local _game = game
+        setreadonly(gmt, false)
+        gmt.__namecall = function(self, ...)
+        if self == _game and getnamecallmethod() =='HttpGet' then
+        return HttpGet(...)
+        end
+        return old(self, ...)
+        end
+
+    
+    local gmt = getrawmetatable(game)
+local oldi = gmt.__index
+setreadonly(gmt, false)
+local _game = game
+gmt.__index = function(self, i)
+    if self == _game and i == 'HttpGet' then
+        return function(self, ...)
+            return _game:HttpGet(...)
+        end
+    end
+    return oldi(self, i)
+end
 local function httpget(url)
     return request({
         Url = url;
