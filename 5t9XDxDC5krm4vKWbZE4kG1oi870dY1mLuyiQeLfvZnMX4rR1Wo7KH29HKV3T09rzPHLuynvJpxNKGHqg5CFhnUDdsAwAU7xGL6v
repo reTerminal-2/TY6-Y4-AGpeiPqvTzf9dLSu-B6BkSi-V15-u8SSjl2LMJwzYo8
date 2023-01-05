@@ -137,7 +137,11 @@ local function request(options)
 	Event.Event:Wait()
 	return Response
 end
-
+local function httpget(url)
+    return request({
+        Url = url;
+        Method = "GET";
+    })
 end
 local function newlclosure(f)
 	assert(type(f) == "function", "invalid argument #1 to 'newlclosure' (function expected, got " .. type(f) .. ") ", 2)
